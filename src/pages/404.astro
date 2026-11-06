@@ -1,0 +1,7 @@
+---
+import { withBase } from '../lib/urls';
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Рецепт не найден | Что приготовить за 30 минут" description="Такой страницы нет. Найдите другое блюдо в каталоге быстрых рецептов." noindex>
+  <div class="container not-found"><p class="eyebrow">404 · Кажется, здесь пусто</p><h1>Этого рецепта<br />у нас пока нет</h1><p>Зато есть 12 других идей для вкусного дня.</p><a class="button button-primary" href={withBase('/recipes/')}>Перейти к рецептам <span aria-hidden="true">↗</span></a></div>
+</Layout>

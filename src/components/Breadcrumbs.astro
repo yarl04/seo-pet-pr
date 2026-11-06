@@ -1,0 +1,8 @@
+---
+import { withBase } from '../lib/urls';
+import type { BreadcrumbsProps } from '../types/ui';
+const { items } = Astro.props as BreadcrumbsProps;
+---
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol>{items.map((item) => <li>{item.href ? <a href={withBase(item.href)}>{item.name}</a> : <span aria-current="page">{item.name}</span>}</li>)}</ol>
+</nav>

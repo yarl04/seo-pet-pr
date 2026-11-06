@@ -1,0 +1,22 @@
+---
+import { withBase } from '../../lib/urls';
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import RecipeGrid from '../../components/RecipeGrid.astro';
+import { recipes } from '../../data/recipes';
+import { categories } from '../../data/categories';
+import { recipeCount } from '../../lib/recipes';
+import { breadcrumbSchema, listSchema } from '../../lib/seo';
+export function getStaticPaths() { return categories.map((category) => ({ params: { slug: category.id }, props: { category } })); }
+const { category } = Astro.props;
+const selected = recipes.filter((recipe) => recipe.category === category.id);
+const breadcrumbs = [{ name: 'Главная', href: '/' }, { name: 'Все рецепты', href: '/recipes/' }, { name: category.name }];
+---
+<Layout title={`${category.name} за 30 минут — простые пошаговые рецепты`} description={category.description} schema={[breadcrumbSchema(breadcrumbs, Astro.url.pathname, Astro.site!), listSchema(selected, Astro.site!)]}>
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} />
+    <div class="page-heading category-page-heading"><p class="eyebrow">{category.subtitle}</p><h1>{category.name} за 30 минут</h1><p>{category.description}</p></div>
+    <section class="section category-recipes" aria-labelledby="category-recipes-title"><div class="section-heading"><h2 id="category-recipes-title">{recipeCount(selected.length)} для вас</h2><a class="text-link" href={withBase(`/recipes/?category=${category.id}`)}>Подобрать по продуктам <span aria-hidden="true">↗</span></a></div><RecipeGrid recipes={selected} /></section>
+    <nav class="other-categories" aria-label="Другие категории"><p>А что ещё приготовим?</p><ul>{categories.filter((item) => item.id !== category.id).map((item) => <li><a class="button button-outline" href={withBase(`/categories/${item.id}/`)}>{item.name} <span aria-hidden="true">↗</span></a></li>)}</ul></nav>
+  </div>
+</Layout>

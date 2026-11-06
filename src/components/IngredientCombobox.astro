@@ -1,0 +1,18 @@
+---
+import type { IngredientComboboxProps } from '../types/ui';
+const { ingredients } = Astro.props as IngredientComboboxProps;
+---
+<div class="field ingredient-field" data-combobox>
+  <label for="ingredient">Основной ингредиент</label>
+  <select id="ingredient" name="ingredient"><option value="">Любой ингредиент</option>{ingredients.map((ingredient) => <option value={ingredient}>{ingredient}</option>)}</select>
+  <div class="combobox-widget" hidden>
+    <div class="combobox-input-wrap">
+      <input id="ingredient-input" type="text" role="combobox" aria-expanded="false" aria-controls="ingredient-options" aria-autocomplete="list" aria-describedby="ingredient-help" autocomplete="off" placeholder="Например, курица" />
+      <button type="button" class="combobox-toggle" tabindex="-1" aria-label="Показать варианты ингредиентов" aria-controls="ingredient-options"><span aria-hidden="true">⌄</span></button>
+    </div>
+    <ul id="ingredient-options" role="listbox" aria-label="Основной ингредиент" hidden></ul>
+    <p class="combobox-empty" hidden>Такого ингредиента нет. Попробуйте другой.</p>
+    <p id="ingredient-help" class="field-help">Начните вводить и выберите из списка.</p>
+    <span class="sr-only" data-combobox-status role="status"></span>
+  </div>
+</div>

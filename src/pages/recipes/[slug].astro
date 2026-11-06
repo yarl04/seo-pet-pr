@@ -1,0 +1,33 @@
+---
+import { withBase } from '../../lib/urls';
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import RecipeGrid from '../../components/RecipeGrid.astro';
+import { recipes } from '../../data/recipes';
+import { categoryName, totalMinutes } from '../../lib/recipes';
+import { breadcrumbSchema, recipeSchema } from '../../lib/seo';
+export function getStaticPaths() { return recipes.map((recipe) => ({ params: { slug: recipe.slug }, props: { recipe } })); }
+const { recipe } = Astro.props;
+const related = recipes.filter((item) => item.category === recipe.category && item.slug !== recipe.slug).slice(0, 3);
+const breadcrumbs = [{ name: 'Главная', href: '/' }, { name: categoryName(recipe.category), href: `/categories/${recipe.category}/` }, { name: recipe.name }];
+---
+<Layout title={`${recipe.name} за ${totalMinutes(recipe)} минут | Что приготовить`} description={recipe.description} image={recipe.image} imageAlt={recipe.imageAlt} schema={[recipeSchema(recipe, Astro.site!), breadcrumbSchema(breadcrumbs, Astro.url.pathname, Astro.site!)]}>
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} />
+    <article class="recipe-detail">
+      <header class="recipe-intro">
+        <div class="recipe-intro-copy"><p class="eyebrow">{categoryName(recipe.category)}<span> / </span>{recipe.vegetarian ? 'Без мяса и рыбы' : recipe.mainIngredient}</p><h1>{recipe.name}</h1><p class="recipe-description">{recipe.description}</p>
+          <dl class="recipe-facts"><div><dt>Всего</dt><dd><time datetime={`PT${totalMinutes(recipe)}M`}>{totalMinutes(recipe)} мин</time></dd></div><div><dt>Подготовка</dt><dd>{recipe.prepMinutes} мин</dd></div><div><dt>У плиты</dt><dd>{recipe.cookMinutes} мин</dd></div><div><dt>Порций</dt><dd>{recipe.servings}</dd></div></dl>
+          <a class="button button-primary" href="#cooking">Начать готовить <span aria-hidden="true">↓</span></a>
+        </div>
+        <img class="recipe-main-photo" src={withBase(recipe.image)} alt={recipe.imageAlt} width="700" height="700" fetchpriority="high" />
+      </header>
+      <div class="recipe-body" id="cooking">
+        <section class="ingredients" aria-labelledby="ingredients-title"><div class="ingredients-heading"><h2 id="ingredients-title">Ингредиенты</h2><p>Порций: {recipe.servings}</p></div><ul>{recipe.ingredients.map((ingredient) => <li>{ingredient}</li>)}</ul></section>
+        <section class="instructions" aria-labelledby="instructions-title"><p class="eyebrow">Шаг за шагом</p><h2 id="instructions-title">Готовим вместе</h2><ol role="list">{recipe.steps.map((step, index) => <li id={`step-${index + 1}`}><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol></section>
+      </div>
+    </article>
+    <aside class="kitchen-note recipe-tip" aria-labelledby="tip-title"><span class="note-symbol" aria-hidden="true">✳</span><div><h2 id="tip-title">Небольшой совет</h2><p>{recipe.tip}</p></div></aside>
+    <section class="section related-recipes" aria-labelledby="related-title"><div class="section-heading"><h2 id="related-title">Ещё кое-что вкусное</h2><a class="text-link" href={withBase(`/categories/${recipe.category}/`)}>Все {categoryName(recipe.category).toLowerCase()} <span aria-hidden="true">↗</span></a></div><RecipeGrid recipes={related} /></section>
+  </div>
+</Layout>

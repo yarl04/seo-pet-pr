@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import RecipeGrid from '../../components/RecipeGrid.astro';
+import CatalogFilters from '../../components/CatalogFilters.astro';
+import { recipes } from '../../data/recipes';
+import { breadcrumbSchema, listSchema, serializeSchema } from '../../lib/seo';
+import { recipeCount, totalMinutes } from '../../lib/recipes';
+const breadcrumbs = [{ name: 'Главная', href: '/' }, { name: 'Все рецепты' }];
+const filterData = recipes.map((recipe) => ({ slug: recipe.slug, name: recipe.name, ingredients: recipe.ingredients, category: recipe.category, mainIngredient: recipe.mainIngredient, vegetarian: recipe.vegetarian, minutes: totalMinutes(recipe) }));
+---
+<Layout title="Все рецепты до 30 минут — поиск по продуктам и времени" description="Найдите быстрый рецепт по названию, основному ингредиенту и времени. Завтраки, обеды и ужины, в том числе без мяса и рыбы." schema={[breadcrumbSchema(breadcrumbs, Astro.url.pathname, Astro.site!), listSchema(recipes, Astro.site!)]}>
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} />
+    <div class="page-heading"><p class="eyebrow">Маленькие планы на вкусный день</p><h1>Что будем готовить?</h1><p>Выбирайте по настроению. Или по тому, что есть в холодильнике.</p></div>
+    <div class="catalog-layout">
+      <div><CatalogFilters /></div>
+      <section class="catalog-results" aria-labelledby="results-title">
+        <div class="results-heading"><h2 id="results-title">Все рецепты</h2><p id="result-count" role="status" aria-atomic="true">{recipeCount(recipes.length)}</p></div>
+        <RecipeGrid recipes={recipes} />
+        <div id="empty-results" class="empty-results" hidden><span aria-hidden="true">◌</span><h3>Пока ничего не нашлось</h3><p>Попробуйте другой продукт или увеличьте время приготовления.</p><button class="button button-primary" type="button" id="clear-empty-filters">Сбросить фильтры</button></div>
+      </section>
+    </div>
+  </div>
+  <script id="recipe-filter-data" type="application/json" is:inline set:html={serializeSchema(filterData)} />
+  <script>import '../../scripts/catalog';</script>
+</Layout>

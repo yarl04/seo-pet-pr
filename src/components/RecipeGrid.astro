@@ -1,0 +1,8 @@
+---
+import RecipeCard from './RecipeCard.astro';
+import type { RecipeGridProps } from '../types/ui';
+const { recipes, heading = 'h3' } = Astro.props as RecipeGridProps;
+---
+<ul class="recipe-grid" role="list">
+  {recipes.map((recipe) => <li data-recipe={recipe.slug}><RecipeCard recipe={recipe} heading={heading} /></li>)}
+</ul>

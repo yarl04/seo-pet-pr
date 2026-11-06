@@ -1,0 +1,20 @@
+---
+import { withBase } from '../lib/urls';
+import { categories } from '../data/categories';
+const path = Astro.url.pathname;
+const links = [{ name: 'Все рецепты', href: '/recipes/' }, ...categories.map((c) => ({ name: c.name, href: `/categories/${c.id}/` }))];
+---
+<a class="skip-link" href="#main">Перейти к содержимому</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={withBase('/')} aria-label="За 30 минут — главная">
+      <span class="brand-clock" aria-hidden="true">30<span>мин</span></span>
+      <span>Что приготовить<span class="brand-subline">просто, вкусно, каждый день</span></span>
+    </a>
+    <nav aria-label="Основная навигация">
+      <ul class="main-nav">
+        {links.map((link) => <li><a href={withBase(link.href)} aria-current={path === withBase(link.href) ? 'page' : undefined}>{link.name}</a></li>)}
+      </ul>
+    </nav>
+  </div>
+</header>

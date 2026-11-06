@@ -1,0 +1,10 @@
+---
+import { withBase } from '../lib/urls';
+---
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <a class="footer-brand" href={withBase('/')}>Что приготовить за 30 минут</a>
+    <p>Меньше времени у плиты. Больше — за столом.</p>
+    <a href={withBase('/recipes/')}>Выбрать рецепт <span aria-hidden="true">↗</span></a>
+  </div>
+</footer>

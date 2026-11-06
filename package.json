@@ -1,0 +1,28 @@
+{
+  "name": "seo-pet-pr",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20.19.0" },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview --host 0.0.0.0",
+    "check": "astro check",
+    "test": "playwright test",
+    "verify": "npm run check && npm run build && npm test"
+  },
+  "dependencies": {
+    "@fontsource-variable/golos-text": "^5.2.0",
+    "@fontsource-variable/manrope": "^5.2.0",
+    "astro": "^5.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "@astrojs/check": "^0.9.4",
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.56.0",
+    "typescript": "^5.9.3"
+  },
+  "overrides": { "unifont": "0.7.3" }
+}

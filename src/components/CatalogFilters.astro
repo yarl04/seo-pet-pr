@@ -1,0 +1,17 @@
+---
+import { categories } from '../data/categories';
+import { recipes } from '../data/recipes';
+import IngredientCombobox from './IngredientCombobox.astro';
+const ingredients = [...new Set(recipes.map((recipe) => recipe.mainIngredient))].sort((a, b) => a.localeCompare(b, 'ru'));
+---
+<form id="recipe-filters" class="filter-form" aria-label="Поиск и фильтры рецептов" hidden>
+  <div class="filter-title"><h2>Подобрать рецепт</h2><span aria-hidden="true">↘</span></div>
+  <div class="field"><label for="recipe-query">Название или продукт</label><input id="recipe-query" name="q" type="search" placeholder="Например, паста" /></div>
+  <div class="field"><label for="category">Что готовим?</label><select id="category" name="category"><option value="">Любое блюдо</option>{categories.map((category) => <option value={category.id}>{category.name}</option>)}</select></div>
+  <IngredientCombobox ingredients={ingredients} />
+  <div class="field"><label for="time">Сколько есть времени?</label><select id="time" name="time"><option value="30">До 30 минут</option><option value="20">До 20 минут</option><option value="15">До 15 минут</option></select></div>
+  <label class="checkbox-label"><input id="vegetarian" name="vegetarian" type="checkbox" />Без мяса и рыбы</label>
+  <button type="reset" class="reset-button">Сбросить фильтры <span aria-hidden="true">↺</span></button>
+  <p class="filter-footnote">Рецепты обновляются сразу после выбора.</p>
+</form>
+<p id="filter-fallback" class="no-js-note">Для поиска и фильтров включите JavaScript. Все рецепты доступны ниже, а категории — в основном меню.</p>

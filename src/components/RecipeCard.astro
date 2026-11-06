@@ -1,0 +1,18 @@
+---
+import { withBase } from '../lib/urls';
+import type { RecipeCardProps } from '../types/ui';
+import { categoryName, recipeUrl, totalMinutes } from '../lib/recipes';
+const { recipe, heading: Heading = 'h3', eager = false } = Astro.props as RecipeCardProps;
+---
+<article class="recipe-card">
+  <div class="card-image">
+    <img src={withBase(recipe.image)} alt={recipe.imageAlt} width="700" height="700" loading={eager ? 'eager' : 'lazy'} decoding="async" />
+    <span class="time-badge"><span class="clock-icon" aria-hidden="true"></span>{totalMinutes(recipe)} мин</span>
+  </div>
+  <div class="card-content">
+    <p class="card-category">{categoryName(recipe.category)}<span> · </span>{recipe.vegetarian ? 'Без мяса и рыбы' : recipe.mainIngredient}</p>
+    <Heading><a href={recipeUrl(recipe)}>{recipe.name}</a></Heading>
+    <p class="card-description">{recipe.description}</p>
+    <span class="card-arrow" aria-hidden="true">↗</span>
+  </div>
+</article>
